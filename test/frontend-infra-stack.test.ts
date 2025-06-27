@@ -41,7 +41,7 @@ describe('FrontendInfraStack', () => {
   test('Origin Access Control Created', () => {
     template.hasResourceProperties('AWS::CloudFront::OriginAccessControl', {
       OriginAccessControlConfig: {
-        OriginAccessControlOriginType: 'S3',
+        OriginAccessControlOriginType: 's3',
         SigningBehavior: 'always',
         SigningProtocol: 'sigv4'
       }
