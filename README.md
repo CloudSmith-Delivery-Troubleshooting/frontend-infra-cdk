@@ -25,7 +25,7 @@ This CDK app provisions:
 
 ## 📋 Prerequisites
 
-- Node.js 18 or higher
+- Node.js 20 or higher
 - AWS CLI configured
 - AWS CDK v2 installed globally: `npm install -g aws-cdk`
 - An AWS account with appropriate permissions

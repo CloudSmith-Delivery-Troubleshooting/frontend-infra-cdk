@@ -36,10 +36,14 @@ export class FrontendInfraStack extends cdk.Stack {
     });
 
     // Create Origin Access Control (OAC) for secure access to S3
-    const originAccessControl = new cloudfront.OriginAccessControl(this, 'OAC', {
-      description: `OAC for ${prefix} website bucket`,
-      originAccessControlOriginType: cloudfront.OriginAccessControlOriginType.S3,
-      signing: cloudfront.Signing.SIGV4_ALWAYS,
+    const originAccessControl = new cloudfront.CfnOriginAccessControl(this, 'OAC', {
+      originAccessControlConfig: {
+        description: `OAC for ${prefix} website bucket`,
+        name: `${prefix}-oac`,
+        originAccessControlOriginType: 's3',
+        signingBehavior: 'always',
+        signingProtocol: 'sigv4',
+      },
     });
 
     // SSL Certificate (optional)
@@ -59,13 +63,11 @@ export class FrontendInfraStack extends cdk.Stack {
     }
 
     // Create CloudFront distribution
-    const distributionProps: cloudfront.DistributionProps = {
+    const distributionConfig: cloudfront.DistributionProps = {
       comment: `${prefix} Frontend Distribution`,
       defaultRootObject: 'index.html',
       defaultBehavior: {
-        origin: origins.S3BucketOrigin.withOriginAccessControl(this.bucket, {
-          originAccessControl,
-        }),
+        origin: new origins.S3Origin(this.bucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
@@ -73,9 +75,7 @@ export class FrontendInfraStack extends cdk.Stack {
       },
       additionalBehaviors: {
         '/api/*': {
-          origin: origins.S3BucketOrigin.withOriginAccessControl(this.bucket, {
-            originAccessControl,
-          }),
+          origin: new origins.S3Origin(this.bucket),
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
@@ -97,15 +97,18 @@ export class FrontendInfraStack extends cdk.Stack {
       ],
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
       enabled: true,
+      ...(certificate && props?.domainName && {
+        domainNames: [props.domainName, `www.${props.domainName}`],
+        certificate: certificate,
+      }),
     };
 
-    // Add domain and certificate if provided
-    if (certificate && props?.domainName) {
-      distributionProps.domainNames = [props.domainName, `www.${props.domainName}`];
-      distributionProps.certificate = certificate;
-    }
+    this.distribution = new cloudfront.Distribution(this, 'Distribution', distributionConfig);
 
-    this.distribution = new cloudfront.Distribution(this, 'Distribution', distributionProps);
+    // Associate OAC with the distribution's origin
+    const cfnDistribution = this.distribution.node.defaultChild as cloudfront.CfnDistribution;
+    cfnDistribution.addPropertyOverride('DistributionConfig.Origins.0.OriginAccessControlId', originAccessControl.attrId);
+    cfnDistribution.addPropertyOverride('DistributionConfig.Origins.1.OriginAccessControlId', originAccessControl.attrId);
 
     // Grant CloudFront OAC access to S3 bucket
     this.bucket.addToResourcePolicy(

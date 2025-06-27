@@ -1,5 +1,6 @@
-import { IAspect, IConstruct } from 'constructs';
+import { IConstruct } from 'constructs';
 import * as cdk from 'aws-cdk-lib';
+import { IAspect } from 'aws-cdk-lib';
 
 /**
  * Aspect that applies a prefix to resource names
@@ -88,10 +89,6 @@ export class PrefixAspect implements IAspect {
   }
 
   private addPrefixTag(resource: cdk.CfnResource): void {
-    if (!resource.tags) {
-      resource.tags = cdk.TagManager.of(resource);
-    }
-
     // Add a tag to identify the prefix used
     cdk.Tags.of(resource).add('Prefix', this.prefix);
     cdk.Tags.of(resource).add('Application', `${this.prefix}-frontend`);
