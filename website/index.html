@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontend Infrastructure CDK</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #ffd700, #ffed4e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        .tech-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+        }
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(0, 255, 0, 0.2);
+            border-radius: 10px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Frontend Infrastructure</h1>
+        <p>Successfully deployed with AWS CDK!</p>
+        <div class="status">
+            ✅ S3 Bucket ✅ CloudFront ✅ OAC ✅ HTTPS
+        </div>
+        <div class="tech-stack">
+            <div class="tech-item">AWS CDK</div>
+            <div class="tech-item">TypeScript</div>
+            <div class="tech-item">Amazon S3</div>
+            <div class="tech-item">CloudFront</div>
+            <div class="tech-item">Route53</div>
+            <div class="tech-item">ACM</div>
+        </div>
+        <p style="margin-top: 2rem; font-size: 1rem; opacity: 0.7;">
+            Powered by AWS CDK v2 • Built with ❤️ for the cloud
+        </p>
+    </div>
+
+    <script>
+        // Simple SPA behavior demonstration
+        console.log('Frontend Infrastructure CDK - Ready!');
+
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            const techItems = document.querySelectorAll('.tech-item');
+            techItems.forEach((item, index) => {
+                item.style.animationDelay = `${index * 0.1}s`;
+                item.style.animation = 'fadeInUp 0.6s ease forwards';
+            });
+        });
+
+        // CSS animations
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

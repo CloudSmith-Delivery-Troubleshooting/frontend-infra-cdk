@@ -1,0 +1,27 @@
+# Source files
+*.ts
+!*.d.ts
+
+# CDK files
+cdk.out
+cdk.context.json
+.cdk.staging
+
+# Test files
+test/
+coverage/
+*.test.*
+
+# Development files
+.vscode/
+.idea/
+.eslintrc.*
+jest.config.js
+tsconfig.json
+
+# Documentation
+README.md
+
+# Git
+.git/
+.gitignore
