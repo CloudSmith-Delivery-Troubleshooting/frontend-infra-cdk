@@ -67,7 +67,9 @@ export class FrontendInfraStack extends cdk.Stack {
       comment: `${prefix} Frontend Distribution`,
       defaultRootObject: 'index.html',
       defaultBehavior: {
-        origin: new origins.S3Origin(this.bucket),
+        origin: new origins.S3Origin(this.bucket, {
+          originAccessIdentity: undefined,
+        }),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         allowedMethods: cloudfront.AllowedMethods.ALLOW_GET_HEAD_OPTIONS,
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
@@ -75,7 +77,9 @@ export class FrontendInfraStack extends cdk.Stack {
       },
       additionalBehaviors: {
         '/api/*': {
-          origin: new origins.S3Origin(this.bucket),
+          origin: new origins.S3Origin(this.bucket, {
+            originAccessIdentity: undefined,
+          }),
           viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
           cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
           allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
